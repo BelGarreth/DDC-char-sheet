@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crawler Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0f14; --panel:#151922; --panel2:#1c2130; --line:#2a3245; --text:#e6e9f0; --muted:#8a93a8;
+  --accent:#ffb627; --accent2:#3ddc97; --bad:#ff5d5d; --chip:#232a3b; --input:#0f131b;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f3f1ea; --panel:#ffffff; --panel2:#f6f4ee; --line:#d9d4c7; --text:#1d1f24; --muted:#6b6f7a;
+    --accent:#b86e00; --accent2:#0f8a5f; --bad:#c62828; --chip:#efebe1; --input:#fbfaf6;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f3f1ea; --panel:#ffffff; --panel2:#f6f4ee; --line:#d9d4c7; --text:#1d1f24; --muted:#6b6f7a;
+  --accent:#b86e00; --accent2:#0f8a5f; --bad:#c62828; --chip:#efebe1; --input:#fbfaf6;
+}
+:root[data-theme="dark"]{
+  --bg:#0d0f14; --panel:#151922; --panel2:#1c2130; --line:#2a3245; --text:#e6e9f0; --muted:#8a93a8;
+  --accent:#ffb627; --accent2:#3ddc97; --bad:#ff5d5d; --chip:#232a3b; --input:#0f131b;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 Inter,system-ui,sans-serif}
+h1,h2,h3{font-family:"Chakra Petch",system-ui,sans-serif;letter-spacing:.02em;margin:0}
+h1{font-size:20px;color:var(--accent)}
+h2{font-size:15px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;display:flex;gap:8px;align-items:baseline}
+h2 small{font-family:Inter,sans-serif;text-transform:none;color:var(--muted);font-weight:400;font-size:12px}
+h3{font-size:13px;margin-bottom:6px}
+header{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line);padding:10px 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+header .sp{flex:1}
+main{max-width:1200px;margin:0 auto;padding:16px;display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+section{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;grid-column:span 12;min-width:0}
+.s6{grid-column:span 6}.s4{grid-column:span 4}.s8{grid-column:span 8}
+@media (max-width:900px){.s6,.s4,.s8{grid-column:span 12}}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:3px}
+input,select,textarea{font:inherit;color:var(--text);background:var(--input);border:1px solid var(--line);border-radius:6px;padding:6px 8px;width:100%;min-width:0}
+textarea{resize:vertical;min-height:70px}
+input[type=checkbox],input[type=radio]{width:auto;accent-color:var(--accent)}
+input[type=number]{width:70px}
+button{font:inherit;font-size:13px;cursor:pointer;color:var(--text);background:var(--chip);border:1px solid var(--line);border-radius:6px;padding:6px 10px;white-space:nowrap}
+button:hover{border-color:var(--accent)}
+button.pri{background:var(--accent);color:#111;border-color:var(--accent);font-weight:600}
+button.mini{padding:2px 7px;font-size:12px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.row>div{flex:1;min-width:140px}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.card{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px}
+.card .top{display:flex;gap:6px;margin-bottom:8px}
+.pick{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--text);margin:3px 0;cursor:pointer}
+.pick.dis{opacity:.45}
+.tag{display:inline-block;font-size:11px;background:var(--chip);border:1px solid var(--line);border-radius:4px;padding:0 5px;color:var(--muted);margin-left:4px}
+.warn{color:var(--bad);font-size:13px;margin-top:8px}
+.ok{color:var(--accent2)}
+.muted{color:var(--muted)}
+.radios{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.radios label{display:flex;gap:6px;align-items:center;color:var(--text);font-size:13px;margin:0;cursor:pointer}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:600;color:var(--muted);font-size:11px;text-transform:uppercase;border-bottom:1px solid var(--line);padding:6px 6px}
+td{border-bottom:1px solid var(--line);padding:6px;vertical-align:top}
+td input[type=text]{padding:3px 6px}
+td input[type=number]{width:56px;padding:3px 6px}
+.tw{overflow-x:auto}
+.big{font-family:"Chakra Petch",sans-serif;font-size:22px;font-weight:700;color:var(--accent)}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media (max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px;text-align:center}
+.stat .nm{font-family:"Chakra Petch";font-weight:700;letter-spacing:.06em}
+.stat .md{font-family:"Chakra Petch";font-size:26px;color:var(--accent);font-weight:700}
+.stat select,.stat input{text-align:center;width:100%;margin-top:4px}
+.stat .sub{font-size:11px;color:var(--muted);margin-top:6px}
+.derived{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.dv{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.dv .k{font-size:11px;color:var(--muted);text-transform:uppercase}
+.hb{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-top:6px}
+.hb div{border:1px solid var(--accent2);color:var(--accent2);border-radius:4px;text-align:center;padding:6px 0;font-weight:700;cursor:pointer;user-select:none}
+.hb div.lost{border-color:var(--line);color:var(--muted);text-decoration:line-through;background:var(--input)}
+.note{font-size:12px;color:var(--muted)}
+.r5{font-size:12px;color:var(--muted)}
+.r5.on{color:var(--accent2)}
+.hot{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px}
+.hot div{display:flex;gap:6px;align-items:center}
+.hot b{color:var(--muted);width:18px;text-align:right;font-size:12px}
+.hot .auto{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:6px 8px;flex:1;font-size:13px}
+footer{max-width:1200px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:var(--muted)}
+@media print{
+  header,button,.noprint{display:none!important}
+  body{background:#fff;color:#000}
+  section{break-inside:avoid;border-color:#999}
+  :root{--bg:#fff;--panel:#fff;--panel2:#fff;--line:#bbb;--text:#000;--muted:#444;--accent:#000;--accent2:#000;--input:#fff;--chip:#fff}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>CRAWLER SHEET</h1>
+  <span class="muted">Dungeon Crawler Carl RPG</span>
+  <span class="sp"></span>
+  <button class="pri" data-act="randomize">Roll a random crawler</button>
+  <button data-act="share">Copy share link</button>
+  <button data-act="export">Export</button>
+  <button data-act="import">Import</button>
+  <button data-act="print">Print</button>
+  <button data-act="theme" title="Toggle theme">◐</button>
+  <button data-act="reset">Reset</button>
+  <input type="file" id="importFile" accept="application/json" hidden>
+</header>
+<main id="app"></main>
+<footer>Unofficial fan tool for the Dungeon Crawler Carl Roleplaying Game, built from the character creation rules in <i>Crawlers &amp; Customization</i> (Renegade Game Studios / Matt Dinniman). Not affiliated. Saves to this browser automatically.</footer>
+<script>
+const STATS=[['str','Strength'],['int','Intelligence'],['con','Constitution'],['dex','Dexterity'],['cha','Charisma']];
+const AB={str:'Str',int:'Int',con:'Con',dex:'Dex',cha:'Cha'};
+
+const SK={
+  'Aiming':{s:null,t:'Passive',d:'Ranged attacks only. Add your Ranks to the attack if you roll it with Disadvantage; +1d4 damage on a hit.',r5:'+1d4 more damage.'},
+  'Ambush':{s:'int',t:'Opposed (Int)',d:'As a Mob approaches, win to get a surprise Action before combat; attacking unseen gives Advantage.',r5:'Add an Ambush Rank die to the surprise attack.'},
+  'Animal Handling':{s:'cha',t:'Opposed (Int)',d:'Calm or befriend an animal so it won\'t attack you.',r5:'Specialize in an animal type for Advantage.'},
+  'Catcher':{s:null,t:'Passive, Interrupt',d:'Step in (10ft Step allowed) and take a direct hit meant for an adjacent ally. No Evade.',r5:'+5 DR when catching.'},
+  'Chopper Pilot':{s:'dex',t:'Unopposed',d:'Stunts, races and chases on a motorcycle. Disadvantage to attack while piloting; no two-handed weapons.',r5:'Chopper gets +5 Move.'},
+  'Climbing':{s:'str',t:'Unopposed',d:'Dangerous or hurried climbs; check every minute. Disadvantage to attack while climbing.',r5:'Check every 5 minutes.'},
+  'Deception':{s:'cha',t:'Opposed (Int)',d:'Lie and get away with it. Disadvantage vs. targets with Detect Lies.',r5:'Usable while gambling.'},
+  'Detect Lies':{s:'int',t:'Opposed (Cha)',d:'Sense whether someone is lying (or believes they\'re honest). Disadvantage vs. Deception.',r5:'Ignore extra effects of a Major Fail or worse.'},
+  'Detect Trap':{s:'int',t:'Unopposed',d:'Notice non-magic traps. Disadvantage when scanning a whole room or moving.',r5:'Detect magical traps.'},
+  'Determine Value':{s:null,t:'Passive',d:'Sort your HUD Inventory by value. Only increases by magical means.',r5:'Inventory tabs by type, plus item history.'},
+  'Dodge':{s:null,t:'Passive',d:'+1 Evade Buff. Mark when Evading until Rank 5; after that, magic or training only.',r5:'Another +1 Evade; extra 5ft Step when you Evade.'},
+  'Driving':{s:'dex',t:'Unopposed',d:'Racing, chasing, or dangerous driving. Disadvantage to attack while driving.',r5:'No attack Disadvantage while driving.'},
+  'Dumpster Diving':{s:'int',t:'Unopposed',d:'1 hour searching a 50ft area (once per area) for something useful.',r5:'Also find a Rank die\'s worth of Misc. Junk.'},
+  'Endurance':{s:'con',t:'Unopposed',d:'Keep going through long strenuous activity (and grinding past 5 hours) without becoming Fatigued.',r5:'Ignore Major Fail effects.'},
+  'Engineering':{s:'int',t:'Unopposed',d:'Build mundane things with moving parts, fluids or chemicals from Misc. Junk. No vehicles.',r5:'Specialize in an item type for Advantage.'},
+  'Escape Artist':{s:'dex',t:'Unopposed / Opposed (Str)',d:'Slip bonds (Unopposed) or escape being Held (Str-Opposed).',r5:'Escape unseen, then take an unseen Step.'},
+  'Explosives Handling':{s:'int',t:'Unopposed',d:'Safely handle standard explosives. Throwing them uses Throwing.',r5:'Identify type, status and raw materials.'},
+  'Fabricate':{s:'int',t:'Unopposed',d:'Make simple mundane items from Misc. Junk. No moving parts, fluids or chemicals.',r5:'Specialize in an item for Advantage.'},
+  'Find Crawler':{s:null,t:'Passive',d:'HUD shows other crawlers within 1,000ft. Only increases by magical means.',r5:'Range becomes 5 miles.'},
+  'First Aid':{s:'int',t:'Unopposed',d:'Patient regains 1 HB slot, +1 per higher degree of Success. Once per patient per rest.',r5:'Spend 5 minutes to also heal a Minor Injury.'},
+  'Goblin Explosives':{s:'int',t:'Unopposed',d:'Safely use goblin explosives. Critical Fail on a natural 1–4.',r5:'Crit Fail only on 1–3; identify devices.'},
+  'Good First Impression':{s:'cha',t:'Opposed (Int)',d:'A non-hostile NPC or Mob approaches with wary curiosity. Individuals only; not crawlers, Bosses or Elites.',r5:'Lower-level Mobs won\'t attack unless provoked.'},
+  'Hide in Shadows':{s:'dex',t:'Opposed (Int)',d:'Stay still in shadow or out of sight to become invisible to Mobs and HUDs. Advantage behind larger cover.',r5:'Works in dim light without cover.'},
+  'Incendiary Device Handling':{s:'int',t:'Unopposed',d:'Safely handle incendiary devices.',r5:'Identify type, status and raw materials.'},
+  'Intimidate':{s:'str',t:'Opposed (Cha)',d:'Give a foe the Staggered Debuff. Disadvantage once anyone has been hostile.',r5:'Target can only move away from you until end of next round.'},
+  'Investigation':{s:'int',t:'Unopposed',d:'10 minutes studying an area or puzzle; only 1 Action for Look for Clues.',r5:'Advantage in areas you know.'},
+  'Jumping':{s:'str',t:'Unopposed',d:'With a 10ft running start, leap Rank + Str feet, 1ft high.',r5:'Add Dex to the height.'},
+  'Light on Your Feet':{s:'dex',t:'Unopposed',d:'Animals only. Running leap of Rank×2 ft, height Dex×2 ft.',r5:'Distance Rank×3, height Dex×3.',animal:true},
+  'Lockpicking':{s:'dex',t:'Unopposed',d:'Takes Floor Number minutes. Disadvantage without proper tools unless the lock is crude.',r5:'Silent, leaves no trace.'},
+  'Negotiation':{s:'cha',t:'Opposed (Int)',d:'5 minutes haggling: shift a price 10% your way or reach tentative terms. Not your own party.',r5:'Party members get your price too.'},
+  'Perception':{s:'int',t:'Unopposed',d:'Notice details others miss; also used for Look for Clues.',r5:'Halve the clutter penalty.'},
+  'Performance':{s:'cha',t:'Unopposed',d:'Entertain an audience in your chosen specialty. Rivals add their Cha to the Difficulty.',r5:'Add a second specialty.'},
+  'Persuasion':{s:'cha',t:'Opposed (Int)',d:'About 10 minutes to talk someone into a suggestion that isn\'t too costly, dangerous or against their nature.',r5:'Works unless it\'s too costly for them.'},
+  'Regeneration':{s:null,t:'Passive',d:'Heal 1 HB slot each round if Rank ≥ Con, otherwise every other round.',r5:'Minor Injuries end after 5 min, Major after 10.'},
+  'Repair':{s:'int',t:'Unopposed',d:'2 hours to fix simple broken (not destroyed) items without moving parts.',r5:'Can repair things with moving parts.'},
+  'Running':{s:'dex',t:'Unopposed',d:'Short bursts: races, chases, fleeing. Check each minute, +1 per 10ft of Move.',r5:'Check every 2 minutes; +5ft Move.'},
+  'Salvage':{s:'int',t:'Unopposed',d:'1 hour to recover half the raw materials from something. Not explosives.',r5:'Takes 30 minutes.'},
+  'Sleight of Hand':{s:'dex',t:'Opposed (Int)',d:'Manipulate hand-sized objects unseen. Disadvantage if their Perception Rank beats yours.',r5:'Pick the pockets of NPCs and Mobs.'},
+  'Stealth':{s:'dex',t:'Opposed (Int)',d:'Move undetected (start out of sight). Before combat, gain a non-Attack Action.',r5:'Surprise Action can be an attack with Advantage.'},
+  'Streetwise':{s:'cha',t:'Unopposed',d:'Rumors, shady dealers, power structures, and keeping a low profile in towns.',r5:'Hear an extra rumor.'},
+  'Survival':{s:'con',t:'Unopposed',d:'Get through dangerous remote areas without hunger or thirst effects.',r5:'No extra damage on a Critical Fail.'},
+  'Swimming':{s:'str',t:'Unopposed',d:'Swim when it matters; check every 30 seconds. Fatigued after 1 minute or a Major Fail.',r5:'Fatigued after 2 minutes instead.'},
+  'Tactics':{s:'int',t:'Unopposed',d:'Once per combat: party gets +1 to Attack, Damage or Evade, +1 per higher degree of Success.',r5:'Advantage after 5 minutes observing.'},
+  'Taunt':{s:'cha',t:'Opposed (Int), Interrupt',d:'Pull an attack aimed at someone within 30ft onto yourself; more on higher Success.',r5:'Free Evade against each taunted attack.'},
+  'Throwing':{s:'str',t:'Unopposed / Evade',d:'Throw up to Str lbs as far as Str×10 ft. Misses scatter (d8 direction, miss margin in feet).',r5:'Advantage throwing to a willing catcher.'},
+  'Tracking':{s:'int',t:'Unopposed',d:'Find and follow tracks; recheck every 15 minutes.',r5:'Recheck every 30 minutes.'}
+};
+
+const W={
+  'Unarmed Combat':{g:'Hand-to-Hand',s:'str',dmg:[1,4],ds:'str',ty:'Bludgeoning',ai:1,r5:[1,4],lim:'No Damage Effects'},
+  'Pugilism':{g:'Hand-to-Hand',s:'dex',dmg:[1,2],ds:'str',ty:'Bludgeoning',ai:2,r5:[2,2],fx:['Iron Punch','Powerful Strike'],lim:'AI Favor only without a Damage Effect'},
+  'Foot Soldier':{g:'Hand-to-Hand',s:'str',dmg:[1,4],ds:'str',ty:'Bludgeoning',ai:1,r5:[1,4],fx:['Powerful Strike','Smush'],lim:'AI Favor only without a Damage Effect'},
+  'Noggin Nocker':{g:'Hand-to-Hand',s:'str',dmg:[1,4],ds:'con',ty:'Bludgeoning',ai:1,r5:[1,4],fx:['Skullcracker','Powerful Strike'],lim:'You lose 1 HB slot on a hit',r5n:'No self-damage'},
+  "Wrasslin’":{g:'Hand-to-Hand',s:'str',dmg:[1,4],ds:'str',ty:'Bludgeoning',ai:1,fx:['Choke Out','Toss'],lim:'Two hands; target becomes Held',r5n:'Maintain Held for free (escape-prevention at Disadvantage)'},
+  'Club':{g:'Bashing',s:'str',dmg:[1,6],ds:'str',ty:'Bludgeoning',r5:[1,6]},
+  'Improvised Weapons':{g:'Bashing',s:'str',dmg:[1,4],ds:'str',ty:'Bludgeoning',ai:1,r5:[1,4],lim:'1 lb up to Str lbs',r5n:'Throw it Rank×5 ft'},
+  'Warhammer':{g:'Bashing',s:'str',dmg:[1,10],ds:'str',ty:'Bludgeoning',r5:[1,10],lim:'Two hands'},
+  'Axe':{g:'Edged',s:'str',dmg:[1,6],ds:'str',ty:'Slashing',r5:[1,6]},
+  'Dagger':{g:'Edged',s:'dex',dmg:[1,4],ds:'str',ty:'Piercing',ai:1,r5:[1,4],r5n:'Armor-Piercing (ignores DR)'},
+  'Longsword':{g:'Edged',s:'str',dmg:[1,8],ds:'str',ty:'Slashing',r5:[1,8]},
+  'Bow':{g:'Ranged',s:'dex',dmg:[1,6],ds:'str',ty:'Piercing',rg:'100ft',r5:[1,6],lim:'Two hands; ammo'},
+  'Crossbow':{g:'Ranged',s:'dex',dmg:[1,8],ds:null,ty:'Piercing',rg:'50ft',r5:[1,8],lim:'Two hands; ammo; once per round'},
+  'Handgun':{g:'Ranged',s:'dex',dmg:[1,8],ds:null,ty:'Piercing',rg:'150ft',r5:[1,8],lim:'Ammo; reload (1 Action) after Major Fail'},
+  'Shotgun':{g:'Ranged',s:'dex',dmg:[1,10],ds:null,ty:'Piercing',rg:'30ft',r5:[1,10],lim:'Two hands; ammo; reload after Major Fail'},
+  'Javelin':{g:'Ranged',s:'dex',dmg:[1,8],ds:'str',ty:'Piercing',rg:'40ft',r5:[1,8]},
+  'Shuriken':{g:'Ranged',s:'dex',dmg:[1,4],ds:'str',ty:'Piercing',rg:'30ft',ai:1,r5:[1,4],r5n:'Range 40ft'},
+  'Slingshot':{g:'Ranged',s:'dex',dmg:[1,2],ds:'str',ty:'Bludgeoning',rg:'30ft',ai:2,r5:[1,2],lim:'Two hands',r5n:'Range + Str score in feet'},
+  'Polearm':{g:'Reach',s:'str',dmg:[1,8],ds:'str',ty:'Piercing',rg:'10ft reach',r5:[1,8],lim:'Two hands'},
+  'Quarterstaff':{g:'Reach',s:'str',dmg:[1,6],ds:'str',ty:'Bludgeoning',rg:'10ft reach',r5:[1,6],lim:'Two hands'},
+  'Slice Attack':{g:'Animal',s:'dex',dmg:[1,4],ds:'str',ty:'Slashing',ai:1,r5:[1,4],animal:true},
+  'Back Claw':{g:'Animal',s:'str',dmg:[1,6],ds:'str',ty:'Slashing',r5:[1,6],animal:true},
+  'Bite':{g:'Animal',s:'str',dmg:[1,8],ds:'str',ty:'Piercing',r5:[1,8],lim:'Target needs an appendage to bite',animal:true}
+};
+
+const DE={
+  'Iron Punch':{d:'Pugilism Damage Effect. +1d2 base damage.',r5:'Add 1 Rank damage die.'},
+  'Powerful Strike':{d:'Foot Soldier / Noggin Nocker / Pugilism. Multiply base dice result by this Rank. Cooldown 30 hours.',r5:'Cooldown 10 hours.'},
+  'Skullcracker':{d:'Noggin Nocker. +1d4 base damage vs. a target your size.',r5:'Another +1d4 vs. same size.'},
+  'Smush':{d:'Foot Soldier. ×2 total damage vs. targets at 20% HB or less. Once per round.',r5:'Works at 30% HB, ×3 damage.'},
+  'Toss':{d:'Wrasslin\'. +1d8 + Str Bludgeoning, ends Held, throws a smaller target 5ft per 5 Ranks (min 5ft).',r5:'Can Toss foes up to your size.'},
+  'Choke Out':{d:'Wrasslin\'. ×2 total damage if target is at 10% HB or less.',r5:'Works at 20% HB.'}
+};
+
+const SP={
+  'Astral Paw':{atk:0,mp:12,rg:'30ft',d:'Spectral paw/hand manipulates objects for an Action; Skill Checks through it at Disadvantage. Lasts the combat or 5 min.',r5:'Pugilism and Slice Attacks through it add a Rank die.'},
+  'Confusing Fog':{atk:0,mp:6,rg:'40ft',d:'25×25ft fog your side sees through; Mobs attack into it with Disadvantage. 2 rounds. Cooldown 15 min.',r5:'50×50ft, lasts 1 minute.'},
+  'Dirt Clod':{atk:1,mp:1,rg:'100ft',dmg:[1,2],ty:'Bludgeoning',ai:2,r5:[2,2],start:1},
+  'Drain Life':{atk:1,mp:14,rg:'30ft',dmg:[1,6],ty:'Necrotic',r5:[1,6],r5n:'Heal 1 HB if target loses 3+ HB slots'},
+  'Fireball':{atk:1,mp:45,rg:'80ft',dmg:[1,12],ty:'Fire',r5:[1,12],lim:'Attack at Disadvantage; 10ft Blast; once per scene; misses scatter',r5n:'Burned on targets losing 1+ HB'},
+  'Fire Fingers':{atk:1,mp:3,rg:'Melee',dmg:[1,4],ty:'Fire',ai:1,r5:[1,4],start:1},
+  'Frost Scar':{atk:1,mp:2,rg:'Melee',dmg:[1,4],ty:'Ice',ai:1,r5:[1,4],r5n:'Target can\'t self-heal next round',start:1},
+  'Heal':{atk:0,mp:2,rg:'Self',d:'Interrupt. Heal 2 HB slots. Rank 1 maximum.',max:1},
+  'Heal Others':{atk:0,mp:6,rg:'30ft',d:'Interrupt. Target heals 1d4 HB slots. Not on yourself.',r5:'Heals 1d6 HB slots.'},
+  'Hole':{atk:0,mp:12,rg:'10ft',d:'Temporary 2ft-wide hole, 1 inch deep per Rank. Not saferoom doors or living things.',r5:'Can shrink the diameter.'},
+  'Ice Blast':{atk:1,mp:9,rg:'40ft',dmg:[1,8],ty:'Ice',r5:[1,8]},
+  'Lightning Bolt':{atk:1,mp:15,rg:'100ft',dmg:[1,10],ty:'Electric',r5:[1,10]},
+  'Magic Missile':{atk:1,mp:5,rg:'Line of sight',dmg:[1,4],ty:'Force',ai:1,r5:[1,4],r5n:'Variable cost: 3 MP −4 dmg, 4 MP −2, 6 MP +Rank die'},
+  'Protective Shell':{atk:0,mp:0,rg:'Self',d:'Interrupt. Imbued on worn gear. (10 + Int)ft shell pushes Mobs out. Cooldown 30 hours.',r5:'Lasts 10s and blocks non-Spell attacks from outside for the round.'},
+  'Puddle Jumper':{atk:0,mp:20,rg:'Line of sight',d:'Teleport you and up to 3 party members after a 10s delay. Cooldown 5 hours.',r5:'2s delay; destination needn\'t be a surface.'},
+  'Second Chance':{atk:0,mp:10,rg:'10ft',d:'Raise a lower-level Mob as an Undead Minion with half its HB for 1 minute.',r5:'Mob up to 5 levels higher; 5 minutes.'},
+  'Shield':{atk:0,mp:8,rg:'Self',d:'Interrupt. 5 min force field with 2 HB slots (Con Mod each) absorbing non-magic damage.',r5:'5 HB slots.'},
+  'Shock Treatment':{atk:1,mp:2,rg:'30ft',dmg:[1,2],ty:'Electric',ai:2,r5:[1,2],r5n:'May Stun instead of damage',start:1},
+  'Soul Collector':{atk:1,mp:4,rg:'50ft',dmg:[1,4],ty:'Necrotic',ai:1,r5:[1,4],r5n:'Kills stack +1 dmg until long rest (max Rank)',start:1},
+  'Thunderlash':{atk:1,mp:12,rg:'50ft',dmg:[1,10],ty:'Sonic',r5:[1,10]},
+  'Torch':{atk:0,mp:1,rg:'Self',d:'Light orb: 20ft bright, 20ft dim beyond. Until saferoom or new floor.',r5:'Move the orb up to 20ft away.'},
+  'Unnecessary Force':{atk:1,mp:13,rg:'40ft',dmg:[1,12],ty:'Force',r5:[1,12]},
+  'Wisp Armor':{atk:0,mp:5,rg:'Self',d:'5 min: incoming magic damage drops to Rank 1 base; immune to mind control. Cooldown 5 min.',r5:'Lasts 10 minutes.'}
+};
+
+const BG={
+  human:[
+    {label:'Childhood',rank:1,die:12,opts:[
+      ['Latchkey Kid',['Streetwise','Perception','Stealth']],['Crafty Kid',['Fabricate','Repair','Salvage']],
+      ['Excitable Kid',['Escape Artist','Endurance','Running']],['Gymnast',['Endurance','Jumping','Performance']],
+      ['Military Brat',['Deception','Streetwise','Tactics']],['MMO Kid',['Fabricate','Engineering','Tactics']],
+      ['Only Child',['Good First Impression','Investigation','Negotiation']],['Outdoor Kid',['Animal Handling','Climbing','Swimming']],
+      ['Problem Child',['Intimidate','Deception','Pugilism']],['Scamp',['Hide in Shadows','Jumping','Throwing']],
+      ["Teacher’s Pet",['Catcher','Perception','Good First Impression']],['Wild Child',['Stealth','Survival','Running']]]},
+    {label:'Adolescence',rank:1,die:12,opts:[
+      ['Family Farm',['Animal Handling','Fabricate','Tracking']],['Drama Nerd',['Fabricate','Deception','Performance']],
+      ['Drop-Out',['Chopper Pilot','Streetwise','Survival']],['Greek Life',['Negotiation','Intimidate','Taunt']],
+      ['Influencer',['Negotiation','Persuasion','Performance']],['Jock',['Endurance','Jumping','Throwing']],
+      ['McJob',['Determine Value','Negotiation','Repair']],['Popular',['Good First Impression','Perception','Persuasion']],
+      ['Religious',['Catcher','First Aid','Persuasion']],['Student Government',['Deception','Persuasion','Investigation']],
+      ['Nerd',['Investigation','Repair','Fabricate']],['Weirdo',['Streetwise','Intimidate','Fabricate']]]},
+    {label:'Career',rank:3,die:12,opts:[
+      ['Criminal',['Deception','Stealth','Streetwise']],['Service Industry',['Dagger','Endurance','Sleight of Hand']],
+      ['Small Business Owner',['Determine Value','Negotiation','Perception']],['Medical',['Sleight of Hand','Detect Lies','First Aid']],
+      ['Law Enforcement',['Detect Lies','Handgun','Investigation']],['Gig Worker',['Driving','Escape Artist','Negotiation']],
+      ['Teacher',['Detect Lies','Perception','Performance']],['Office Drone',['Dumpster Diving','Endurance','Investigation']],
+      ['Entertainer',['Deception','Good First Impression','Performance']],['Unhoused',['Dumpster Diving','Streetwise','Survival']],
+      ['Middle Manager',['Deception','Intimidate','Negotiation']],['Military',['Handgun','Survival','Tactics']]]},
+    {label:'Hobby',rank:2,die:12,opts:[
+      ['Collector',['Fabricate','Determine Value','Investigation']],['Cosplay',['Fabricate','Performance','Salvage']],
+      ['Drinker',['Deception','Intimidate','Streetwise']],['Gamer',['Aiming','Perception','Tactics']],
+      ['Gym Rat',['Running','Endurance','Swimming']],['Hunting',['Tracking','Shotgun','Stealth']],
+      ['Music',['Perception','Performance','Sleight of Hand']],['Motorsports',['Driving','Repair','Salvage']],
+      ['Climber',['Climbing','Jumping','Endurance']],['Pop Culture',['Determine Value','Investigation','Perception']],
+      ['Tinkering',['Engineering','Repair','Salvage']],['Travel',['Endurance','Negotiation','Streetwise']]]}
+  ],
+  animal:[
+    {label:'Youth',rank:1,die:6,opts:[
+      ['Abandoned',['Hide in Shadows','Endurance','Survival']],['Farmed',['Escape Artist','Climbing','Light on Your Feet']],
+      ['Litter-Raised',['Animal Handling','Detect Lies','Back Claw']],['Pampered',['Negotiation','Good First Impression','Persuasion']],
+      ['Runt',['Hide in Shadows','Escape Artist','Stealth']],['Stray',['Back Claw','Streetwise','Survival']]]},
+    {label:'Training',rank:1,die:6,opts:[
+      ['Clever',['Investigation','Detect Lies','Dodge']],['Free Range',['Escape Artist','Survival','Tracking']],
+      ['Pack Mentality',['Animal Handling','Persuasion','Tactics']],['Mischievous',['Deception','Persuasion','Sleight of Hand']],
+      ['Watcher',['Ambush','Investigation','Perception']],['Well-Trained',['Light on Your Feet','Catcher','Performance']]]},
+    {label:'Adult',rank:3,die:6,opts:[
+      ['Guard',['Catcher','Perception','Taunt']],['Pile of Floof',['Escape Artist','Deception','Persuasion']],
+      ['Scrapper',['Light on Your Feet','Streetwise','Survival']],['Show Animal',['Good First Impression','Light on Your Feet','Performance']],
+      ['Support Animal',['Determine Value','First Aid','Perception']],['Working',['Animal Handling','Endurance','Perception']]]},
+    {label:'Quirk',rank:2,die:6,opts:[
+      ['Chow Hound',['Dumpster Diving','Investigation','Intimidate']],['Cuddly',['Good First Impression','Persuasion','Negotiation']],
+      ['Curious',['Climbing','Perception','Swimming']],['Hunter',['Hide in Shadows','Stealth','Tracking']],
+      ['Playful',['Persuasion','Dodge','Intimidate']],['Social',['Animal Handling','Taunt','Perception']]]}
+  ]
+};
+
+const H2H={'Pugilism':'Iron Punch','Foot Soldier':'Smush','Noggin Nocker':'Skullcracker',"Wrasslin’":'Toss'};
+const SIZES=[[1,'Tiny','rat'],[2,'Small','cat, raccoon'],[3,'Petite','dog, boar'],[4,'Medium','chimp, wolf, human'],[5,'Large','horse']];
+
+const TRAUMA=['I was abused by someone I trusted.','I was in a terrible accident.','I witnessed a death.','I was betrayed by a family member, friend, or lover.','I was abandoned by one or more parents.','I have a fear of open spaces.','I have a fear of the dark or being alone.','My home burned down.','I was falsely accused of a betrayal or crime.','I was deeply humiliated by a family member, friend, or lover.','I let someone take the blame for something terrible that I did.','I have a fear of heights.'];
+const LOOSE=['I never finished high school or my college degree.','I was about to open a restaurant or other business.','I didn’t finish writing my novel.','A family member, friend, or lover recently died, but I couldn’t say my goodbyes.','I was on the verge of inventing or discovering something.','I made a promise that I might no longer be able to fulfill.','My collection was almost complete.','I was about to perform for the first time when the collapse happened.','I wanted to dump my partner, but…','I was just about to buy or finish renovating my home.','I never sent that letter to a family member, friend, or loved one.','I never got to travel to my dream destination.'];
+const REGRET=['I didn’t ask them to marry me.','I turned down the perfect job.','I stayed quiet when I shouldn’t have.','I chose my own safety when I should have leapt into action.','I never said goodbye.','I spent way too much time on something pointless.','I did something illegal, immoral, and probably both.','I lied to avoid an event important to those close to me.','I kept a secret that hurt someone badly.','I didn’t apologize for something terrible that I did.','I abandoned someone when they needed me the most.','I trusted the wrong people.'];
+const KITS={
+  Athlete:{clothes:'Jogging attire',weapon:'Barbell (Club)',item:'Headphones, music player',weird:'A 3-pack of condoms'},
+  'Gaming Geek':{clothes:'T-shirt, hoodie, and jeans',weapon:'Boffer sword (Longsword, d4 base damage)',item:'Game book or novel',weird:'12 googly eyes and a single Lego minifig'},
+  Militant:{clothes:'Military fatigues',weapon:'Handgun',item:'2 snack bars',weird:'Morale patch: “No Plan Survives First Contact”'},
+  Outdoorsy:{clothes:'Climate-appropriate gear, orange safety jacket',weapon:'Bow and arrow',item:'Lighter',weird:'A duck call on a leather cord'}
+};
+
+const KEY='ddc-crawler-v1';
+function defaults(){
+  return {v:1,kind:'human',name:'',pronouns:'',crawlerNo:'',level:1,floor:1,species:'',size:3,
+    bg:[0,1,2,3].map(()=>({opt:'',picks:[]})),
+    combat:{mode:'weapon',weapon:'Club',custom:'',spell:'Dirt Clod',h2h:'Pugilism'},
+    statMethod:'array',stats:{str:2,int:3,con:4,dex:5,cha:6},enh:{str:0,int:0,con:0,dex:0,cha:0},
+    rankAdj:{},extra:[],marks:{},skillNotes:{},aiAdj:0,manaCur:null,hbLost:0,
+    trauma:'',loose:'',regret:'',gear:{clothes:'',weapon:'',item:'',weird:''},hotlist:Array(10).fill(''),inventory:'',notes:''};
+}
+let S=load();
+function load(){
+  const h=location.hash.match(/^#c=(.+)$/);
+  if(h){try{const s=JSON.parse(decodeURIComponent(escape(atob(h[1]))));history.replaceState(null,'',location.pathname);return Object.assign(defaults(),s)}catch(e){}}
+  try{const raw=localStorage.getItem(KEY);if(raw)return Object.assign(defaults(),JSON.parse(raw))}catch(e){}
+  return defaults();
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+const d=n=>1+Math.floor(Math.random()*n);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sgn=n=>(n>=0?'+':'')+n;
+function statMod(v){v=Number(v)||0;if(v<=2)return 1;if(v<=5)return 2;if(v<=9)return 3;if(v<=19)return 4;if(v<=49)return 5;if(v<=99)return 6;if(v<=149)return 7;if(v<=199)return 8;if(v<=299)return 9;return 10}
+function rankDie(r){if(r<=0)return'—';if(r===1)return'+1';if(r<=3)return'1d2';if(r<=5)return'1d4';if(r<=7)return'1d6';if(r<=9)return'1d8';return'1d10'}
+const enh=k=>(Number(S.stats[k])||0)+(Number(S.enh[k])||0);
+const M=k=>statMod(enh(k));
+function diceStr(parts){
+  const by={};parts.forEach(([n,s])=>by[s]=(by[s]||0)+n);
+  return Object.keys(by).sort((a,b)=>b-a).map(s=>by[s]+'d'+s).join(' + ');
+}
+function cats(){return BG[S.kind]}
+
+function info(name){
+  if(W[name])return{kind:'weapon',s:W[name].s,t:'Evade'};
+  if(SP[name])return SP[name].atk?{kind:'spell',s:'int',t:'Evade'}:{kind:'spell',s:null,t:'Passive'};
+  if(DE[name])return{kind:'effect',s:null,t:'Passive',d:DE[name].d,r5:DE[name].r5};
+  if(SK[name])return{kind:'skill',...SK[name]};
+  return{kind:'custom',s:null,t:''};
+}
+
+function computeSkills(){
+  const src=[];
+  cats().forEach((c,i)=>{
+    const b=S.bg[i],o=c.opts.find(o=>o[0]===b.opt);if(!o)return;
+    b.picks.filter(p=>o[1].includes(p)).slice(0,2).forEach(p=>src.push({name:p,rank:c.rank,from:c.label}));
+  });
+  src.push({name:S.kind==='human'?'Unarmed Combat':'Slice Attack',rank:3,from:'Combat'});
+  const c=S.combat;
+  if(c.mode==='weapon')src.push({name:c.weapon,rank:3,from:'Weapon'});
+  if(c.mode==='spell')src.push({name:c.spell,rank:3,from:'Attack spell'});
+  if(c.mode==='h2h'){src.push({name:c.h2h,rank:3,from:'Hand-to-hand'});src.push({name:H2H[c.h2h],rank:1,from:'Damage Effect',fixed:false})}
+  src.push({name:'Heal',rank:1,from:'Starting spell'});
+  const map=new Map(),dups=[];
+  for(const s of src){
+    if(map.has(s.name)){const m=map.get(s.name);m.from.push(s.from);m.base=Math.max(m.base,s.rank);dups.push(s.name)}
+    else map.set(s.name,{name:s.name,base:s.rank,from:[s.from]});
+  }
+  S.extra.forEach((e,i)=>{if(!map.has(e.name))map.set(e.name,{name:e.name,base:0,from:['Added'],extraIdx:i})});
+  const list=[...map.values()].map(s=>{
+    const max=SP[s.name]&&SP[s.name].max||15;
+    s.rank=Math.max(0,Math.min(max,s.base+(Number(S.rankAdj[s.name])||0)));
+    return s;
+  });
+  return{list,dups:[...new Set(dups)]};
+}
+
+function attackRow(sk){
+  const r=sk.rank,w=W[sk.name],sp=SP[sk.name];
+  const o=w||sp,hitStat=w?w.s:'int',dmgStat=w?w.ds:'int';
+  const parts=[o.dmg];if(r>=5&&o.r5)parts.push(o.r5);
+  let dmg=diceStr(parts)+(dmgStat?` + ${M(dmgStat)} <span class="muted">(${AB[dmgStat]})</span>`:'');
+  const fx=[o.ty];
+  if(sp)fx.push(`${sp.mp} MP`);
+  fx.push(o.rg||'Melee');
+  if(o.lim)fx.push(o.lim);
+  if(o.ai)fx.push(`AI Favor ${o.ai}`);
+  if(w&&w.fx)fx.push('Effects: '+w.fx.join(' / '));
+  if(r>=5&&o.r5n)fx.push('R5: '+o.r5n);
+  let label=sk.name;
+  if(S.combat.mode==='weapon'&&S.combat.weapon===sk.name&&S.combat.custom.trim())label=`${esc(S.combat.custom.trim())} <span class="muted">(${esc(sk.name)})</span>`;
+  else label=esc(label);
+  return `<tr><td><b>${label}</b></td><td>${r}</td><td><b>${sgn(r+M(hitStat))}</b> <span class="muted">${r} + ${AB[hitStat]} ${M(hitStat)}</span></td><td>${dmg}</td><td>${rankDie(r)}</td><td class="note">${fx.join(' · ')}</td></tr>`;
+}
+
+function render(){
+  const {list,dups}=computeSkills();
+  const has=n=>list.find(s=>s.name===n);
+  const human=S.kind==='human';
+  const dodge=has('Dodge')?(has('Dodge').rank>=5?2:has('Dodge').rank>=1?1:0):0;
+  const run=has('Running');
+  const move=20+(run&&run.rank>=5?5:0);
+  const maxMana=enh('int');
+  const mana=S.manaCur==null?maxMana:S.manaCur;
+  const ai=(human?1:0)+(Number(S.aiAdj)||0);
+  const hp=enh('con')*10,slot=M('con');
+  const warns=[];
+  dups.forEach(n=>warns.push(`<b>${esc(n)}</b> is picked twice (backgrounds or weapon). No double-dipping: ranks don't stack, so swap one out.`));
+  cats().forEach((c,i)=>{const b=S.bg[i];if(!b.opt)warns.push(`Pick your ${c.label} background.`);else if(b.picks.length<2)warns.push(`Pick two ${c.label} skills.`)});
+  if(S.combat.mode==='spell'&&enh('int')<4)warns.push(`An attack spell needs Intelligence 4+ (yours is ${enh('int')}).`);
+  if(S.statMethod==='array'){const v=STATS.map(([k])=>Number(S.stats[k])).sort().join();if(v!=='2,3,4,5,6')warns.push('Standard array: use each of 2, 3, 4, 5 and 6 exactly once.')}
+
+  const weaponOpts=()=>{
+    const groups={};Object.entries(W).forEach(([n,w])=>{if(w.g==='Hand-to-Hand')return;if(w.animal&&(human||n==='Slice Attack'))return;(groups[w.g]=groups[w.g]||[]).push(n)});
+    return Object.entries(groups).map(([g,ns])=>`<optgroup label="${g}">${ns.map(n=>`<option ${S.combat.weapon===n?'selected':''}>${esc(n)}</option>`).join('')}</optgroup>`).join('');
+  };
+  const sel=(id,p,opts,val,extra='')=>`<select id="${id}" data-p="${p}" ${extra}>${opts.map(o=>{const [v,l]=Array.isArray(o)?o:[o,o];return`<option value="${esc(v)}" ${String(v)===String(val)?'selected':''}>${esc(l)}</option>`}).join('')}</select>`;
+  const txt=(id,p,val,ph='')=>`<input type="text" id="${id}" data-p="${p}" value="${esc(val)}" placeholder="${esc(ph)}">`;
+
+  const atkRows=list.filter(s=>W[s.name]||(SP[s.name]&&SP[s.name].atk)).map(attackRow).join('');
+
+  const allNames=[...Object.keys(SK),...Object.keys(W),...Object.keys(DE),...Object.keys(SP)].filter(n=>!list.find(s=>s.name===n)&&!(human&&(SK[n]?.animal||W[n]?.animal))).sort();
+
+  const auto=[{t:'Heal',n:'2 MP · heal 2 HB slots · Interrupt'}];
+  if(S.combat.mode==='spell'){const sp=SP[S.combat.spell];auto.push({t:S.combat.spell,n:`${sp.mp} MP · ${sp.rg}`});auto.push({t:'Standard Mana Potion ×5',n:'Action: fully restore Mana'})}
+  const userSlots=10-auto.length;
+
+  const tableSel=(id,p,arr,val)=>`<div class="row" style="align-items:center"><div style="flex:0 0 auto;min-width:0"><button class="mini" data-act="roll-${p}">Roll d12</button></div><div>${sel(id,p,[['','— choose or write your own —'],...arr.map((t,i)=>[t,`${i+1}. ${t}`])],arr.includes(val)?val:'')}</div></div><input type="text" id="${id}-t" data-p="${p}" value="${esc(val)}" placeholder="…or describe your own" style="margin-top:6px">`;
+
+  document.getElementById('app').innerHTML=`
+  <section class="s8">
+    <h2>Crawler</h2>
+    <div class="radios">
+      <label><input type="radio" name="kind" id="k-h" data-p="kind" value="human" ${human?'checked':''}> Human</label>
+      <label><input type="radio" name="kind" id="k-a" data-p="kind" value="animal" ${!human?'checked':''}> Animal <span class="muted">(GM permission; costs your starting AI Favor)</span></label>
+    </div>
+    <div class="row">
+      <div><label>Name</label>${txt('f-name','name',S.name,'Crawler …')}</div>
+      <div><label>Pronouns / gender</label>${txt('f-pro','pronouns',S.pronouns)}</div>
+      <div><label>Crawler number</label><div style="display:flex;gap:6px">${txt('f-no','crawlerNo',S.crawlerNo,'500,000–12,900,000')}<button data-act="crawlerNo" title="Random">🎲</button></div></div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      ${human?'':`<div><label>Species</label>${txt('f-sp','species',S.species,'cat, dog, raccoon…')}</div>`}
+      <div><label>Size</label>${human?`<input disabled value="Medium (4)">`:sel('f-size','size',SIZES.map(([n,nm,e])=>[n,`${nm} (${n}) · ${e}`]),S.size,'data-num')}</div>
+      <div style="flex:0 0 90px;min-width:90px"><label>Level</label><input type="number" id="f-lvl" data-p="level" data-num min="1" value="${S.level}"></div>
+      <div style="flex:0 0 90px;min-width:90px"><label>Floor</label><input type="number" id="f-fl" data-p="floor" data-num min="1" value="${S.floor}"></div>
+    </div>
+  </section>
+
+  <section class="s4">
+    <h2>Checklist</h2>
+    ${warns.length?warns.map(w=>`<div class="warn">• ${w}</div>`).join(''):`<div class="ok">Crawler is legal. Try not to die.</div>`}
+  </section>
+
+  <section>
+    <h2>Step 1 · Background <small>Pick a background in each stage, then two of its three skills</small></h2>
+    <div class="grid4">
+    ${cats().map((c,i)=>{const b=S.bg[i],o=c.opts.find(o=>o[0]===b.opt);
+      return `<div class="card"><h3>${c.label} <span class="tag">Rank ${c.rank}</span></h3>
+      <div class="top">${sel('bg'+i,`bg.${i}.opt`,[['','— choose —'],...c.opts.map((o,j)=>[o[0],`${j+1}. ${o[0]}`])],b.opt)}<button data-act="rollbg" data-i="${i}" title="Roll 1d${c.die}">d${c.die}</button></div>
+      ${o?o[1].map(s=>{const on=b.picks.includes(s),dis=!on&&b.picks.length>=2;const st=info(s).s;
+        return `<label class="pick ${dis?'dis':''}"><input type="checkbox" id="pk${i}-${esc(s)}" data-pick="${i}" value="${esc(s)}" ${on?'checked':''} ${dis?'disabled':''}> ${esc(s)} <span class="tag">${st?AB[st]:'None'}</span></label>`}).join(''):'<div class="note">No background yet.</div>'}
+      </div>`}).join('')}
+    </div>
+  </section>
+
+  <section class="s6">
+    <h2>Step 2 · Weapon <small>Second combat skill, Rank 3</small></h2>
+    <p class="note" style="margin-top:0">You also start with <b>${human?'Unarmed Combat':'Slice Attack'}</b> at Rank 3.</p>
+    <div class="radios">
+      <label><input type="radio" name="cm" id="cm-w" data-p="combat.mode" value="weapon" ${S.combat.mode==='weapon'?'checked':''}> Weapon</label>
+      <label><input type="radio" name="cm" id="cm-s" data-p="combat.mode" value="spell" ${S.combat.mode==='spell'?'checked':''}> Attack spell</label>
+      <label><input type="radio" name="cm" id="cm-h" data-p="combat.mode" value="h2h" ${S.combat.mode==='h2h'?'checked':''}> Hand-to-hand</label>
+    </div>
+    ${S.combat.mode==='weapon'?`<div class="row"><div><label>Weapon skill</label><select id="c-w" data-p="combat.weapon">${weaponOpts()}</select></div><div><label>Your weapon's name (optional)</label>${txt('c-cn','combat.custom',S.combat.custom,'e.g. Tire Iron')}</div></div>`:''}
+    ${S.combat.mode==='spell'?`<div class="row"><div><label>Spell</label>${sel('c-s','combat.spell',Object.keys(SP).filter(n=>SP[n].start),S.combat.spell)}</div></div><p class="note">Needs Int 4+. You also get 5 Standard Mana Potions.</p>`:''}
+    ${S.combat.mode==='h2h'?`<div class="row"><div><label>Style</label>${sel('c-h','combat.h2h',Object.entries(H2H).map(([k,v])=>[k,`${k} + ${v}`]),S.combat.h2h)}</div></div><p class="note">Bold move. You also get an Achievement and a Bronze Weapon Box with a weapon that has a nasty drawback (GM's call). The Damage Effect is listed at Rank 1; adjust if your GM rules otherwise.</p>`:''}
+  </section>
+
+  <section class="s6">
+    <h2>Step 3 · Stats</h2>
+    <div class="radios">
+      <label><input type="radio" name="sm" id="sm-a" data-p="statMethod" value="array" ${S.statMethod==='array'?'checked':''}> Standard array (2,3,4,5,6)</label>
+      <label><input type="radio" name="sm" id="sm-r" data-p="statMethod" value="roll" ${S.statMethod==='roll'?'checked':''}> Leave it to chance</label>
+      ${S.statMethod==='roll'?`<button class="mini" data-act="rollstats">Roll 1d6 each, reroll 1s</button>`:''}
+    </div>
+    <div class="stats">
+    ${STATS.map(([k,n])=>`<div class="stat"><div class="nm">${AB[k].toUpperCase()}</div><div class="md">${sgn(M(k))}</div>
+      ${S.statMethod==='array'?sel('st-'+k,'stats.'+k,[2,3,4,5,6],S.stats[k],'data-num'):`<input type="number" id="st-${k}" data-p="stats.${k}" data-num min="1" value="${S.stats[k]}">`}
+      <div class="sub">Unenhanced</div>
+      <input type="number" id="en-${k}" data-p="enh.${k}" data-num value="${S.enh[k]}" title="Bonus from gear, buffs, etc.">
+      <div class="sub">Bonus → <b>${enh(k)}</b> enhanced</div></div>`).join('')}
+    </div>
+    <p class="note">Mod comes from the Enhanced value (Table 9). Bonus stays 0 at creation.</p>
+  </section>
+
+  <section>
+    <h2>Steps 4–8 · Derived</h2>
+    <div class="derived">
+      <div class="dv"><div class="k">Evade</div><div class="big">d20 ${sgn(M('dex')+dodge)}</div><div class="note">Dex ${M('dex')}${dodge?` + Dodge ${dodge}`:''}</div></div>
+      <div class="dv"><div class="k">Health</div><div class="big">${hp}</div><div class="note">Con ${enh('con')} × 10</div></div>
+      <div class="dv"><div class="k">Mana</div><div style="display:flex;gap:6px;align-items:center"><input type="number" id="d-mana" data-p="manaCur" data-num value="${mana}" style="width:64px"><span class="big">/ ${maxMana}</span></div><div class="note">Max = Enhanced Int</div></div>
+      <div class="dv"><div class="k">Move / Step</div><div class="big">${move} / 10</div><div class="note">feet${move>20?' (Running R5)':''}</div></div>
+      <div class="dv"><div class="k">AI Favor</div><div style="display:flex;gap:6px;align-items:center"><span class="big">${ai}</span><button class="mini" data-act="ai" data-v="-1">−</button><button class="mini" data-act="ai" data-v="1">+</button></div><div class="note">${human?'Humans start with 1':'Animals start with 0'}</div></div>
+      <div class="dv"><div class="k">Size</div><div class="big">${human?4:S.size}</div><div class="note">${SIZES.find(z=>z[0]===(human?4:Number(S.size)))?.[1]||''}</div></div>
+    </div>
+    <h3 style="margin-top:14px">Health Bar <span class="muted" style="font-weight:400">each slot = 10% of Health, absorbs damage up to your Con Mod (${slot}). Click to mark lost.</span></h3>
+    <div class="hb">${Array.from({length:10},(_,i)=>`<div data-act="hb" data-i="${i}" class="${i>=10-S.hbLost?'lost':''}">${slot}</div>`).join('')}</div>
+  </section>
+
+  <section>
+    <h2>Attacks</h2>
+    <div class="tw"><table><thead><tr><th>Attack</th><th>Rank</th><th>To hit</th><th>Damage</th><th>Rank die</th><th>Effects</th></tr></thead><tbody>${atkRows}</tbody></table></div>
+    <p class="note">Attacks roll d20 + to hit vs. the target's Evade (10 + Dex + Floor). Rank-5 upgrades are applied automatically. The Rank die only adds when an effect says so. Attack spells use Int to hit (the book doesn't say otherwise).</p>
+  </section>
+
+  <section>
+    <h2>Skills <small>d20 + Rank + Stat Mod. Edit Rank as you advance (max 15).</small></h2>
+    <div class="tw"><table><thead><tr><th>Skill</th><th>Rank</th><th>Stat &amp; Mod</th><th>Roll</th><th>Check</th><th>What it does / Rank 5 upgrade</th><th>Your notes</th><th title="Marked for Skill Advancement">✓</th></tr></thead><tbody>
+    ${list.map(s=>{const i=info(s.name),o=W[s.name]||SP[s.name];const st=i.s;
+      const desc=i.d||(SP[s.name]&&SP[s.name].d)||(o?'Attack skill, see Attacks.':'');
+      const r5=i.r5||(SP[s.name]&&SP[s.name].r5)||'';
+      const max=SP[s.name]&&SP[s.name].max||15;
+      return `<tr><td><b>${esc(s.name)}</b>${s.from.map(f=>`<span class="tag">${esc(f)}</span>`).join('')}${s.extraIdx!=null?` <button class="mini noprint" data-act="rmskill" data-i="${s.extraIdx}">✕</button>`:''}</td>
+      <td><input type="number" id="rk-${esc(s.name)}" data-rank="${esc(s.name)}" data-base="${s.base}" min="0" max="${max}" value="${s.rank}"></td>
+      <td>${st?`${AB[st]} ${sgn(M(st))}`:'None'}</td>
+      <td><b>${st?sgn(s.rank+M(st)):'—'}</b></td>
+      <td class="note">${esc(i.t)}</td>
+      <td class="note">${esc(desc)}${r5?`<div class="r5 ${s.rank>=5?'on':''}">R5: ${esc(r5)}</div>`:''}</td>
+      <td><input type="text" id="sn-${esc(s.name)}" data-p="skillNotes.${esc(s.name)}" value="${esc(S.skillNotes[s.name]||'')}"></td>
+      <td><input type="checkbox" id="mk-${esc(s.name)}" data-p="marks.${esc(s.name)}" ${S.marks[s.name]?'checked':''}></td></tr>`}).join('')}
+    </tbody></table></div>
+    <div class="row noprint" style="margin-top:10px">
+      <div><label>Add a skill (learned in play)</label><select id="add-sk"><option value="">— choose —</option>${allNames.map(n=>`<option>${esc(n)}</option>`).join('')}</select></div>
+      <div style="flex:0 0 auto;min-width:0"><button data-act="addskill">Add at Rank 1</button></div>
+      <div style="flex:0 0 auto;min-width:0"><button data-act="clearmarks">Clear advancement marks</button></div>
+    </div>
+    <p class="note">Advancement: roll d20 ≥ current Rank to gain a Rank. Rank 4 or lower: every 2 hours of play. Rank 5+: end of each floor.</p>
+  </section>
+
+  <section class="s6">
+    <h2>Hotlist <small>10 slots, up to 999 of one item per slot</small></h2>
+    <div class="hot">
+      ${auto.map((a,i)=>`<div><b>${i+1}</b><span class="auto"><b style="width:auto;color:var(--text);text-align:left">${esc(a.t)}</b> <span class="muted">${esc(a.n)}</span></span></div>`).join('')}
+      ${Array.from({length:userSlots},(_,i)=>`<div><b>${auto.length+i+1}</b>${txt('hl'+i,'hotlist.'+i,S.hotlist[i])}</div>`).join('')}
+    </div>
+  </section>
+
+  <section class="s6">
+    <h2>Step 10 · Starting stuff</h2>
+    <div class="row" style="margin-bottom:8px">${Object.keys(KITS).map(k=>`<div style="flex:0 0 auto;min-width:0"><button class="mini" data-act="kit" data-k="${k}">${k}</button></div>`).join('')}</div>
+    <div class="row"><div><label>Clothing</label>${txt('g-c','gear.clothes',S.gear.clothes)}</div><div><label>Weapon (in hand)</label>${txt('g-w','gear.weapon',S.gear.weapon,S.combat.mode==='weapon'?(S.combat.custom||S.combat.weapon):S.combat.mode==='spell'?'none (spellcaster)':'none (fists of fury)')}</div></div>
+    <div class="row" style="margin-top:8px"><div><label>Interesting / useful item</label>${txt('g-i','gear.item',S.gear.item)}</div><div><label>Weird stuff</label>${txt('g-x','gear.weird',S.gear.weird)}</div></div>
+    <label style="margin-top:8px">Inventory</label><textarea id="g-inv" data-p="inventory">${esc(S.inventory)}</textarea>
+  </section>
+
+  <section>
+    <h2>Step 9 · Past Trauma, Loose End, Regret <small>Share these with your GM</small></h2>
+    <div class="grid4">
+      <div><h3>Past Trauma</h3>${tableSel('t-tr','trauma',TRAUMA,S.trauma)}</div>
+      <div><h3>Loose End</h3>${tableSel('t-le','loose',LOOSE,S.loose)}</div>
+      <div><h3>Regret</h3>${tableSel('t-rg','regret',REGRET,S.regret)}</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Notes</h2>
+    <textarea id="n-notes" data-p="notes" style="min-height:110px">${esc(S.notes)}</textarea>
+  </section>`;
+}
+
+function setPath(p,v){const ks=p.split('.');let o=S;for(let i=0;i<ks.length-1;i++){o[ks[i]]=o[ks[i]]??{};o=o[ks[i]]}o[ks[ks.length-1]]=v}
+let pending=null;
+function rerender(){
+  clearTimeout(pending);
+  pending=setTimeout(()=>{const id=document.activeElement&&document.activeElement.id;const y=scrollY;render();save();if(id){const el=document.getElementById(id);if(el)el.focus({preventScroll:true})}scrollTo(0,y)},0);
+}
+
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.dataset.p&&(t.type==='text'||t.tagName==='TEXTAREA')){
+    setPath(t.dataset.p,t.value);save();
+  }
+});
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.dataset.pick!=null){
+    const b=S.bg[+t.dataset.pick];
+    if(t.checked){if(b.picks.length<2)b.picks.push(t.value)}else b.picks=b.picks.filter(x=>x!==t.value);
+    return rerender();
+  }
+  if(t.dataset.rank!=null){
+    const v=Math.max(0,Math.min(15,parseInt(t.value)||0));
+    S.rankAdj[t.dataset.rank]=v-Number(t.dataset.base);
+    return rerender();
+  }
+  if(!t.dataset.p)return;
+  let v=t.type==='checkbox'?t.checked:t.value;
+  if(t.dataset.num!==undefined)v=t.value===''?null:Number(t.value);
+  if(t.type==='text'||t.tagName==='TEXTAREA'){
+    if(t.dataset.p==='combat.custom')rerender();
+    return;
+  }
+  setPath(t.dataset.p,v);
+  if(t.dataset.p==='kind'){S.bg=[0,1,2,3].map(()=>({opt:'',picks:[]}));if(S.combat.weapon==='Slice Attack'||(v==='human'&&W[S.combat.weapon]?.animal))S.combat.weapon='Club'}
+  if(/^bg\.\d\.opt$/.test(t.dataset.p))S.bg[+t.dataset.p.split('.')[1]].picks=[];
+  if(t.dataset.p==='statMethod'&&v==='array')S.stats={str:2,int:3,con:4,dex:5,cha:6};
+  if(t.dataset.p.startsWith('stats.int')||t.dataset.p.startsWith('enh.int'))S.manaCur=null;
+  rerender();
+});
+
+function rollStats(){STATS.forEach(([k])=>S.stats[k]=1+d(5))}
+function rollBg(i){const c=cats()[i];S.bg[i]={opt:c.opts[d(c.opts.length)-1][0],picks:[]}}
+function randomize(){
+  const kind=S.kind;S=defaults();S.kind=kind;
+  S.crawlerNo=(500000+Math.floor(Math.random()*12400001)).toLocaleString();
+  const taken=new Set();
+  cats().forEach((c,i)=>{rollBg(i);const o=c.opts.find(o=>o[0]===S.bg[i].opt);const pool=o[1].filter(s=>!taken.has(s));
+    const sh=[...pool].sort(()=>Math.random()-.5).slice(0,2);sh.forEach(s=>taken.add(s));S.bg[i].picks=sh});
+  S.statMethod='roll';rollStats();
+  const r=Math.random();
+  if(r<.15&&enh('int')>=4){S.combat.mode='spell';S.combat.spell=pick(Object.keys(SP).filter(n=>SP[n].start))}
+  else if(r<.25){S.combat.mode='h2h';S.combat.h2h=pick(Object.keys(H2H))}
+  else{S.combat.mode='weapon';S.combat.weapon=pick(Object.keys(W).filter(n=>W[n].g!=='Hand-to-Hand'&&!W[n].animal&&!taken.has(n)))}
+  if(kind==='animal')S.size=pick([2,3,4]);
+  S.trauma=pick(TRAUMA);S.loose=pick(LOOSE);S.regret=pick(REGRET);
+  Object.assign(S.gear,KITS[pick(Object.keys(KITS))]);
+  S.gear.weapon='';
+}
+
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-act]');if(!t)return;
+  const a=t.dataset.act;
+  if(a==='rollbg'){rollBg(+t.dataset.i);return rerender()}
+  if(a==='rollstats'){rollStats();S.manaCur=null;return rerender()}
+  if(a==='crawlerNo'){S.crawlerNo=(500000+Math.floor(Math.random()*12400001)).toLocaleString();return rerender()}
+  if(a==='roll-trauma'){S.trauma=pick(TRAUMA);return rerender()}
+  if(a==='roll-loose'){S.loose=pick(LOOSE);return rerender()}
+  if(a==='roll-regret'){S.regret=pick(REGRET);return rerender()}
+  if(a==='ai'){S.aiAdj=(Number(S.aiAdj)||0)+Number(t.dataset.v);if((S.kind==='human'?1:0)+S.aiAdj<0)S.aiAdj++;return rerender()}
+  if(a==='hb'){const i=+t.dataset.i,lost=10-i;S.hbLost=S.hbLost===lost?lost-1:lost;return rerender()}
+  if(a==='kit'){Object.assign(S.gear,KITS[t.dataset.k]);return rerender()}
+  if(a==='addskill'){const n=document.getElementById('add-sk').value;if(!n)return;S.extra.push({name:n});S.rankAdj[n]=1;return rerender()}
+  if(a==='rmskill'){const ex=S.extra.splice(+t.dataset.i,1)[0];if(ex)delete S.rankAdj[ex.name];return rerender()}
+  if(a==='clearmarks'){S.marks={};return rerender()}
+  if(a==='randomize'){if(!confirm('Replace this crawler with a random one?'))return;randomize();return rerender()}
+  if(a==='reset'){if(!confirm('Wipe this crawler and start over?'))return;S=defaults();return rerender()}
+  if(a==='print')return print();
+  if(a==='theme'){const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=dark?'light':'dark';try{localStorage.setItem(KEY+'-theme',r.dataset.theme)}catch(e){}return}
+  if(a==='export'){const b=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});const u=URL.createObjectURL(b);const l=document.createElement('a');l.href=u;l.download=(S.name||'crawler').replace(/[^\w-]+/g,'_')+'.json';l.click();URL.revokeObjectURL(u);return}
+  if(a==='import')return document.getElementById('importFile').click();
+  if(a==='share'){const url=location.origin+location.pathname+'#c='+btoa(unescape(encodeURIComponent(JSON.stringify(S))));
+    (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(()=>{t.textContent='Link copied';setTimeout(()=>t.textContent='Copy share link',1500)}).catch(()=>prompt('Copy this link:',url));return}
+});
+document.getElementById('importFile').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  f.text().then(txt=>{S=Object.assign(defaults(),JSON.parse(txt));rerender()}).catch(()=>alert('That file is not a crawler export.'));
+  e.target.value='';
+});
+try{const th=localStorage.getItem(KEY+'-theme');if(th)document.documentElement.dataset.theme=th}catch(e){}
+render();save();
+</script>
+</body>
+</html>
